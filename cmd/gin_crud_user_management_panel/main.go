@@ -7,6 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
+	swaggerFiles "github.com/swaggo/files"     // swagger embed files
+	ginSwagger "github.com/swaggo/gin-swagger" // gin-swagger middleware
 )
 
 func main() {
@@ -24,6 +26,10 @@ func main() {
 
 	// Set up Gin
 	r := gin.Default()
+
+	url := ginSwagger.URL("http://localhost:8080/swagger/index.html")
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
+	r.Run(":8080")
 
 	// Register routes
 	routes.RegisterRoutes(r, db)
